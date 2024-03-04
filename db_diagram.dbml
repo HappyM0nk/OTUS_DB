@@ -1,0 +1,68 @@
+// Use DBML to define your database structure
+// Docs: https://dbml.dbdiagram.io/docs
+
+Table specialist {
+  id int  [primary key]
+  surname varchar
+  first_name varchar
+  patronymic varchar
+  speciality varchar
+}
+
+Table service {
+  id int [primary key]
+  name varchar
+}
+
+Table price {
+  id int [primary key]
+  service_id int
+  price decimal
+  begin_date datetime2
+  end_date datetime2
+}
+
+Table specialist_service {
+  id int [primary key]
+  specialist_id int
+  service_id int
+}
+
+Table clients {
+  id int [primary key]
+  surname varchar
+  first_name varchar
+  patronymic varchar
+}
+
+Table visit {
+  id int [primary key]
+  client_id int
+  specialist_id int
+  date datetime2
+  purpose varchar
+  comment varchar
+}
+
+Table service_provided {
+  id int [primary key]
+  service_id int
+  visit_id int
+  date datetime2
+}
+
+Table examination_result{
+  id int [primary key]
+  service_provided_id int
+  date datetime2
+  result varchar
+}
+
+Ref: service.id < price.service_id
+Ref: service.id < specialist_service.service_id
+Ref: specialist.id < specialist_service.specialist_id
+Ref: clients.id < visit.client_id
+Ref: specialist.id < visit.specialist_id
+Ref: service.id < service_provided.service_id
+Ref: visit.id < service_provided.visit_id
+Ref: service_provided.id < examination_result.service_provided_id
