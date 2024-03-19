@@ -38,7 +38,6 @@ Table clients {
 Table visit {
   id int [primary key]
   client_id int
-  specialist_id int
   date datetime2
   purpose varchar
   comment varchar
@@ -58,11 +57,19 @@ Table examination_result{
   result varchar
 }
 
+Table visit_specialist{
+  id int [primary key]
+  visit_id int
+  specialist_id int
+  comment varchar
+}
+
 Ref: service.id < price.service_id
 Ref: service.id < specialist_service.service_id
 Ref: specialist.id < specialist_service.specialist_id
 Ref: clients.id < visit.client_id
-Ref: specialist.id < visit.specialist_id
+Ref: specialist.id < visit_specialist.specialist_id
+Ref: visit.id < visit_specialist.visit_id
 Ref: service.id < service_provided.service_id
 Ref: visit.id < service_provided.visit_id
 Ref: service_provided.id < examination_result.service_provided_id
