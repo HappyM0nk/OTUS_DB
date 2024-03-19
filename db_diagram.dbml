@@ -7,11 +7,20 @@ Table specialist {
   first_name varchar
   patronymic varchar
   speciality varchar
+
+    indexes {
+      surname
+      speciality
+  }
 }
 
 Table service {
   id int [primary key]
   name varchar
+
+  indexes {
+      name [unique]
+  }
 }
 
 Table price {
@@ -20,12 +29,20 @@ Table price {
   price decimal
   begin_date datetime2
   end_date datetime2
+
+  indexes {
+      (service_id, begin_date, end_date) [unique]
+  }
 }
 
 Table specialist_service {
   id int [primary key]
   specialist_id int
   service_id int
+
+  indexes {
+      (service_id, specialist_id) [unique]
+  }
 }
 
 Table clients {
@@ -33,6 +50,12 @@ Table clients {
   surname varchar
   first_name varchar
   patronymic varchar
+  phone varchar
+
+  indexes {
+      surname [type: hash]
+      phone [unique]
+  }
 }
 
 Table visit {
@@ -41,6 +64,10 @@ Table visit {
   date datetime2
   purpose varchar
   comment varchar
+
+  indexes {
+      client_id
+  }
 }
 
 Table service_provided {
@@ -48,6 +75,10 @@ Table service_provided {
   service_id int
   visit_id int
   date datetime2
+
+  indexes {
+      (visit_id, service_id)
+  }
 }
 
 Table examination_result{
@@ -55,6 +86,10 @@ Table examination_result{
   service_provided_id int
   date datetime2
   result varchar
+
+  indexes {
+      service_provided_id
+  }
 }
 
 Table visit_specialist{
@@ -62,6 +97,10 @@ Table visit_specialist{
   visit_id int
   specialist_id int
   comment varchar
+
+  indexes {
+      (specialist_id, visit_id)
+  }
 }
 
 Ref: service.id < price.service_id
