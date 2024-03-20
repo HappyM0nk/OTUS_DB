@@ -2,7 +2,7 @@
 // Docs: https://dbml.dbdiagram.io/docs
 
 Table specialist {
-  id int  [primary key]
+  id int  [pk, unique, not null]
   surname varchar
   first_name varchar
   patronymic varchar
@@ -15,7 +15,7 @@ Table specialist {
 }
 
 Table service {
-  id int [primary key]
+  id int [pk, unique, not null]
   name varchar
 
   indexes {
@@ -24,29 +24,29 @@ Table service {
 }
 
 Table price {
-  id int [primary key]
-  service_id int
+  id int [pk, unique, not null]
+  service_fk int [ref: > service.id]
   price decimal
   begin_date datetime2
   end_date datetime2
 
   indexes {
-      (service_id, begin_date, end_date) [unique]
+      (service_fk, begin_date, end_date) [unique]
   }
 }
 
 Table specialist_service {
-  id int [primary key]
-  specialist_id int
-  service_id int
+  id int [pk, unique, not null]
+  specialist_fk int [ref: > specialist.id]
+  service_fk int [ref: > service.id]
 
   indexes {
-      (service_id, specialist_id) [unique]
+      (service_fk, specialist_fk) [unique]
   }
 }
 
-Table clients {
-  id int [primary key]
+Table client {
+  id int [pk, unique, not null]
   surname varchar
   first_name varchar
   patronymic varchar
@@ -59,56 +59,46 @@ Table clients {
 }
 
 Table visit {
-  id int [primary key]
-  client_id int
+  id int [pk, unique, not null]
+  client_fk int [ref: > client.id]
   date datetime2
   purpose varchar
   comment varchar
 
   indexes {
-      client_id
+      client_fk
   }
 }
 
 Table service_provided {
-  id int [primary key]
-  service_id int
-  visit_id int
+  id int [pk, unique, not null]
+  service_fk int [ref: > service.id]
+  visit_fk int [ref: > visit.id]
   date datetime2
 
   indexes {
-      (visit_id, service_id)
+      (visit_fk, service_fk)
   }
 }
 
 Table examination_result{
-  id int [primary key]
-  service_provided_id int
+  id int [pk, unique, not null]
+  service_provided_fk int [ref: > service_provided.id]
   date datetime2
   result varchar
 
   indexes {
-      service_provided_id
+      service_provided_fk
   }
 }
 
 Table visit_specialist{
-  id int [primary key]
-  visit_id int
-  specialist_id int
+  id int [pk, unique, not null]
+  visit_fk int [ref: > visit.id]
+  specialist_fk int [ref: > specialist.id]
   comment varchar
 
   indexes {
-      (specialist_id, visit_id)
+      (specialist_fk, visit_fk)
   }
 }
-
-Ref: service.id < price.service_id
-Ref: service.id < specialist_service.service_id
-Ref: specialist.id < specialist_service.specialist_id
-Ref: clients.id < visit.client_id
-Ref: specialist.id < visit_specialist.specialist_id
-Ref: visit.id < visit_specialist.visit_id
-Ref: service.id < service_provided.service_id
-Ref: visit.id < service_provided.visit_id
-Ref: service_provided.id < examination_result.service_provided_id
