@@ -1,5 +1,5 @@
 CREATE DATABASE medical_center;
-\c;
+\c medical_center;
 
 CREATE SCHEMA directory;
 CREATE SCHEMA reference;
