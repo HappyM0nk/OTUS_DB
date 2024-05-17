@@ -1,4 +1,6 @@
-CREATE DATABASE medical_center;
+CREATE TABLESPACE medical_center_ts LOCATION '/home/postgres/medical_center';
+
+CREATE DATABASE medical_center TABLESPACE medical_center_ts;
 \c medical_center;
 
 CREATE SCHEMA directory;
@@ -85,3 +87,9 @@ ALTER TABLE directory.examination_result ADD FOREIGN KEY ("service_provided_fk")
 ALTER TABLE reference.visit_specialist ADD FOREIGN KEY ("visit_fk") REFERENCES directory.visit ("id");
 
 ALTER TABLE reference.visit_specialist ADD FOREIGN KEY ("specialist_fk") REFERENCES directory.specialist ("id");
+
+CREATE ROLE administrator WITH LOGIN;
+GRANT SELECT, INSERT, UPDATE, DELETE ON ALL TABLES IN SCHEMA directory, reference to administrator;
+
+CREATE ROLE specialist WITH LOGIN;
+GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE reference.visit_specialist, reference.service_provided, directory.examination_result to specialist;
