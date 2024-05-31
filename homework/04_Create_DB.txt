@@ -38,7 +38,8 @@ CREATE TABLE directory.client (
   "surname" varchar,
   "first_name" varchar,
   "patronymic" varchar,
-  "phone" varchar
+  "phone" varchar,
+  "birthday" date
 );
 
 CREATE TABLE directory.visit (
