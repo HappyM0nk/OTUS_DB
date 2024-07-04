@@ -82,17 +82,20 @@ where v.id = vs.visit_fk;
 
 delete from directory.price	p
 	using directory.service s
-where p.begin_date > now() and s.name ILike '%первичный%';
+where p.service_fk = s.id and p.begin_date > now() and s.name ILike '%первичный%';
 */
 
 -- Задание со *: Приведите пример использования утилиты COPY
 
 /*Скрипт копирует содержимое выборки визитов в файл "C:\Otus_db\visits.txt". Можно применять как выгрузку статистики в файл за определённый период времени.
 
-Так же можно использовать команду COPY FROM, чтобы добавить данные из файла к имеющимся записям в таблице. Например если предоставлены новые цены на услуги, которые нужно добавить в БД.
-
 copy (select (c.surname || ' ' || left(c.first_name, 1) || '.' || ' ' || left(c.patronymic, 1) || '.') as client_name, v.date, v.purpose, v.comment
 		from directory.client c join directory.visit v
 		on v.client_fk = c.id)
 to 'C:\Otus_db\visits.txt'
+
+Так же можно использовать команду COPY FROM, чтобы добавить данные из файла к имеющимся записям в таблице. Например если предоставлены новые цены на услуги, которые нужно добавить в БД.
+
+copy directory.price (id, service_fk, price, begin_date, end_date) from 'C:\_repos\OTUS_DB\homework\05_DML_new_prices.txt'
+	delimiter ',' header NULL 'null';
 */
