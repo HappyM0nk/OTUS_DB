@@ -32,7 +32,21 @@ mysql> select version();
 Результатом работы данного скрипта будет наличие созданной базы данных сразу после разврачивания контейнера.
 
 ```sql
-show tables;
+mysql> show tables;
++--------------------------+
+| Tables_in_medical_center |
++--------------------------+
+| client                   |
+| examination_result       |
+| price                    |
+| service                  |
+| service_provided         |
+| specialist               |
+| specialist_service       |
+| visit                    |
+| visit_specialist         |
++--------------------------+
+9 rows in set (0.00 sec)
 ```
 
 
@@ -47,7 +61,42 @@ max_connections = 128
 max_allowed_packet  = 16M
 ```
 
+Кастомный файл конфигурации у меня не захотел сразу применяться, пришлось вручную задать на него права. После перезапуска контейнера новые параметры применились.
+
+```bash
+chmod 644 /etc/mysql/conf.d/my.cnf
+```
+
 Проверка применения данных параметров:
 ```sql
-show variables like '%max_connections%';
+mysql> show variables like '%max_connections%';
++------------------------+-------+
+| Variable_name          | Value |
++------------------------+-------+
+| max_connections        | 128   |
+| mysqlx_max_connections | 100   |
++------------------------+-------+
+2 rows in set (0.01 sec)
+```
+
+```sql
+mysql> show variables like '%innodb_buffer_pool_size%';
++-------------------------+-----------+
+| Variable_name           | Value     |
++-------------------------+-----------+
+| innodb_buffer_pool_size | 536870912 |
++-------------------------+-----------+
+1 row in set (0.00 sec)
+```
+
+```sql
+mysql> show variables like '%max_allowed_packet%';
++---------------------------+------------+
+| Variable_name             | Value      |
++---------------------------+------------+
+| max_allowed_packet        | 16777216   |
+| mysqlx_max_allowed_packet | 67108864   |
+| slave_max_allowed_packet  | 1073741824 |
++---------------------------+------------+
+3 rows in set (0.01 sec)
 ```
