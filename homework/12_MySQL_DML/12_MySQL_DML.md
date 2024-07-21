@@ -73,24 +73,12 @@ where v.date between '2024-05-01 00:00:00' and '2024-05-31 23:59:59';
 Запрос выводит специалистов, визитов к которым было менее 10 за месяц. Можно отслеживать востребованность специалистов центра.
 
 ```sql
-select * from
-	(select s.surname, s.first_name, s.patronymic, count(v.id) as visits_count
-	from specialist s inner join visit_specialist vs
-	    on s.id = vs.specialist_fk 
-	inner join visit v
-		on v.id = vs.visit_fk
-	group by s.id) r
-where r.visits_count < 10;
-```
-
-Аналогичный результат можно получить используя оператор HAVING.
-
-```sql
 select s.surname, s.first_name, s.patronymic, count(v.id) as visits_count
 from specialist s inner join visit_specialist vs
     on s.id = vs.specialist_fk 
 inner join visit v
 	on v.id = vs.visit_fk
+where v.date between '2024-05-01 00:00:00' and '2024-05-31 23:59:59'
 group by s.id
 having visits_count < 10;
 
