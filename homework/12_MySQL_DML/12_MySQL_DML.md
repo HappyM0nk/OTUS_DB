@@ -81,6 +81,18 @@ select * from
 		on v.id = vs.visit_fk
 	group by s.id) r
 where r.visits_count < 10;
+```
+
+Аналогичный результат можно получить используя оператор HAVING.
+
+```sql
+select s.surname, s.first_name, s.patronymic, count(v.id) as visits_count
+from specialist s inner join visit_specialist vs
+    on s.id = vs.specialist_fk 
+inner join visit v
+	on v.id = vs.visit_fk
+group by s.id
+having visits_count < 10;
 
 |surname |first_name|patronymic|visits_count|
 |--------|----------|----------|------------|
@@ -89,17 +101,22 @@ where r.visits_count < 10;
 
 ```
 
-Запрос меняет телефон клиента по его id. Клиент сменил телефон. Аналогично могут меняться любые реквизиты клиента.
+Следующим запросом можно узнать динамику изменения уровня сахара у конкретного пциента с указанием даты сдачи анализа.
 
 ```sql
-update client 
-set 
-	phone = '123123123'
-where id = 1;
+SELECT
+  er.date,
+  er.results->>'$.GLU' AS Glucose
+FROM examination_result er
+INNER JOIN service_provided sp ON er.service_provided_fk = sp.id
+INNER JOIN visit v ON sp.visit_fk = v.id
+WHERE v.client_fk = 1 and sp.service_fk = 1
+ORDER BY er.date;
 
-|id |surname|first_name|patronymic|phone    |
-|---|-------|----------|----------|---------|
-|1  |Иванов |Иван      |Иванович  |123123123|
+|date               |Glucose|
+|-------------------|-------|
+|2024-01-10 13:30:00|1.52   |
+|2024-02-10 10:10:00|3.82   |
 
 ```
 
