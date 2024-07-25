@@ -67,11 +67,50 @@ mysqlimport
 create database funny_data_loading;
 use funny_data_loading;
 
-create table csv_load_data (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
-  `handle` text,
-  `title` text,
-  `body (HTML)` text,
-  Handle,Title,Body (HTML),Vendor,Type,Tags,Published,Option1 Name,Option1 Value,Option2 Name,Option2 Value,Option3 Name,Option3 Value,Variant SKU,Variant Grams,Variant Inventory Tracker,Variant Inventory Qty,Variant Inventory Policy,Variant Fulfillment Service,Variant Price,Variant Compare At Price,Variant Requires Shipping,Variant Taxable,Variant Barcode,Image Src,Image Alt Text,Gift Card,SEO Title,SEO Description,Google Shopping / Google Product Category,Google Shopping / Gender,Google Shopping / Age Group,Google Shopping / MPN,Google Shopping / AdWords Grouping,Google Shopping / AdWords Labels,Google Shopping / Condition,Google Shopping / Custom Product,Google Shopping / Custom Label 0,Google Shopping / Custom Label 1,Google Shopping / Custom Label 2,Google Shopping / Custom Label 3,Google Shopping / Custom Label 4,Variant Image,Variant Weight Unit
+CREATE TABLE funny_data_loading(
+   Handle                                    VARCHAR(55) NOT NULL PRIMARY KEY
+  ,Title                                     VARCHAR(55)
+  ,"Body HTML"                               VARCHAR(10733)
+  ,Vendor                                    VARCHAR(24)
+  ,Type                                      VARCHAR(23)
+  ,Tags                                      VARCHAR(206)
+  ,Published                                 VARCHAR(5)
+  ,"Option1 Name"                            VARCHAR(12)
+  ,"Option1 Value"                           VARCHAR(38)
+  ,"Option2 Name"                            VARCHAR(8)
+  ,"Option2 Value"                           VARCHAR(19)
+  ,"Option3 Name"                            VARCHAR(30)
+  ,"Option3 Value"                           VARCHAR(30)
+  ,"Variant SKU"                             VARCHAR(93)
+  ,"Variant Grams"                           INTEGER 
+  ,"Variant Inventory Tracker"               VARCHAR(7)
+  ,"Variant Inventory Qty"                   INTEGER 
+  ,"Variant Inventory Policy"                VARCHAR(8)
+  ,"Variant Fulfillment Service"             VARCHAR(6)
+  ,"Variant Price"                           NUMERIC(7,2)
+  ,"Variant Compare At Price"                NUMERIC(7,2)
+  ,"Variant Requires Shipping"               VARCHAR(5)
+  ,"Variant Taxable"                         VARCHAR(4)
+  ,"Variant Barcode"                         VARCHAR(14)
+  ,"Image Src"                               VARCHAR(145)
+  ,"Image Alt Text"                          VARCHAR(16)
+  ,"Gift Card"                               VARCHAR(5)
+  ,"SEO Title"                               VARCHAR(30)
+  ,"SEO Description"                         VARCHAR(160)
+  ,"Google Shopping Google Product Category" VARCHAR(94)
+  ,"Google Shopping Gender"                  VARCHAR(6)
+  ,"Google Shopping Age Group"               VARCHAR(5)
+  ,"Google Shopping MPN"                     INTEGER 
+  ,"Google Shopping AdWords Grouping"        VARCHAR(18)
+  ,"Google Shopping AdWords Labels"          VARCHAR(18)
+  ,"Google Shopping Condition"               VARCHAR(3)
+  ,"Google Shopping Custom Product"          VARCHAR(5)
+  ,"Google Shopping Custom Label 0"          VARCHAR(30)
+  ,"Google Shopping Custom Label 1"          VARCHAR(30)
+  ,"Google Shopping Custom Label 2"          VARCHAR(30)
+  ,"Google Shopping Custom Label 3"          VARCHAR(30)
+  ,"Google Shopping Custom Label 4"          VARCHAR(30)
+  ,"Variant Image"                           VARCHAR(145)
+  ,"Variant Weight Unit"                     VARCHAR(2)
 );
 ```
