@@ -30,6 +30,10 @@ VALUES
 	(2, 2, 120, '2024-04-20', null),
 	(3, 1, 130, '2024-07-20', null);
 
+-- insert into price (service_fk, price, begin_date, end_date) 
+-- select service_fk, price*1.1, ADDDATE(begin_date, INTERVAL 1 MONTH), ADDDATE(end_date, INTERVAL 1 MONTH) from price;
+
+
 INSERT INTO service_provided (id, service_fk, visit_fk, `date`)
 values
 (1, 1, 1, '2024-01-10 13:30:00'),
