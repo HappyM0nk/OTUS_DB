@@ -56,61 +56,105 @@ id|service_fk|visit_fk|serv_date          |res_id|service_provided_fk|res_date  
 ```
 
 ## Загрузка данных из CSV
-Загрузить данные из приложенных в материалах csv.
-Реализовать следующими путями:
-LOAD DATA
+**Задача: Загрузить данные из приложенных в материалах csv.**
 
-Задание со *: загрузить используя
-mysqlimport
+Для удобства в имеющийся compose файл было добавлено монтирование папки mysql-files в директрию /var/lib/mysql-files docker контейнера. Все необходимые csv файлы были размещены в этой папке, чтобы иметь возможность загрузить из них данные в таблицу.
+
+Подготовка к загрузке данных. Создаётся база данных и таблица с необходимыми полями.
 
 ```sql
 create database funny_data_loading;
 use funny_data_loading;
 
 CREATE TABLE funny_data_loading(
-   Handle                                    VARCHAR(55) NOT NULL PRIMARY KEY
-  ,Title                                     VARCHAR(55)
-  ,"Body HTML"                               VARCHAR(10733)
-  ,Vendor                                    VARCHAR(24)
-  ,Type                                      VARCHAR(23)
-  ,Tags                                      VARCHAR(206)
-  ,Published                                 VARCHAR(5)
-  ,"Option1 Name"                            VARCHAR(12)
-  ,"Option1 Value"                           VARCHAR(38)
-  ,"Option2 Name"                            VARCHAR(8)
-  ,"Option2 Value"                           VARCHAR(19)
-  ,"Option3 Name"                            VARCHAR(30)
-  ,"Option3 Value"                           VARCHAR(30)
-  ,"Variant SKU"                             VARCHAR(93)
-  ,"Variant Grams"                           INTEGER 
-  ,"Variant Inventory Tracker"               VARCHAR(7)
-  ,"Variant Inventory Qty"                   INTEGER 
-  ,"Variant Inventory Policy"                VARCHAR(8)
-  ,"Variant Fulfillment Service"             VARCHAR(6)
-  ,"Variant Price"                           NUMERIC(7,2)
-  ,"Variant Compare At Price"                NUMERIC(7,2)
-  ,"Variant Requires Shipping"               VARCHAR(5)
-  ,"Variant Taxable"                         VARCHAR(4)
-  ,"Variant Barcode"                         VARCHAR(14)
-  ,"Image Src"                               VARCHAR(145)
-  ,"Image Alt Text"                          VARCHAR(16)
-  ,"Gift Card"                               VARCHAR(5)
-  ,"SEO Title"                               VARCHAR(30)
-  ,"SEO Description"                         VARCHAR(160)
-  ,"Google Shopping Google Product Category" VARCHAR(94)
-  ,"Google Shopping Gender"                  VARCHAR(6)
-  ,"Google Shopping Age Group"               VARCHAR(5)
-  ,"Google Shopping MPN"                     INTEGER 
-  ,"Google Shopping AdWords Grouping"        VARCHAR(18)
-  ,"Google Shopping AdWords Labels"          VARCHAR(18)
-  ,"Google Shopping Condition"               VARCHAR(3)
-  ,"Google Shopping Custom Product"          VARCHAR(5)
-  ,"Google Shopping Custom Label 0"          VARCHAR(30)
-  ,"Google Shopping Custom Label 1"          VARCHAR(30)
-  ,"Google Shopping Custom Label 2"          VARCHAR(30)
-  ,"Google Shopping Custom Label 3"          VARCHAR(30)
-  ,"Google Shopping Custom Label 4"          VARCHAR(30)
-  ,"Variant Image"                           VARCHAR(145)
-  ,"Variant Weight Unit"                     VARCHAR(2)
+   Handle                                    TEXT
+  ,Title                                     TEXT
+  ,`Body HTML`                               TEXT
+  ,Vendor                                    TEXT
+  ,Type                                      TEXT
+  ,Tags                                      TEXT
+  ,Published                                 TEXT
+  ,`Option1 Name`                            TEXT
+  ,`Option1 Value`                           TEXT
+  ,`Option2 Name`                            TEXT
+  ,`Option2 Value`                           TEXT
+  ,`Option3 Name`                            TEXT
+  ,`Option3 Value`                           TEXT
+  ,`Variant SKU`                             TEXT
+  ,`Variant Grams`                           TEXT 
+  ,`Variant Inventory Tracker`               TEXT
+  ,`Variant Inventory Qty`                   TEXT 
+  ,`Variant Inventory Policy`                TEXT
+  ,`Variant Fulfillment Service`             TEXT
+  ,`Variant Price`                           TEXT
+  ,`Variant Compare At Price`                TEXT
+  ,`Variant Requires Shipping`               TEXT
+  ,`Variant Taxable`                         TEXT
+  ,`Variant Barcode`                         TEXT
+  ,`Image Src`                               TEXT
+  ,`Image Alt Text`                          TEXT
+  ,`Gift Card`                               TEXT
+  ,`SEO Title`                               TEXT
+  ,`SEO Description`                         TEXT
+  ,`Google Shopping Google Product Category` TEXT
+  ,`Google Shopping Gender`                  TEXT
+  ,`Google Shopping Age Group`               TEXT
+  ,`Google Shopping MPN`                     TEXT 
+  ,`Google Shopping AdWords Grouping`        TEXT
+  ,`Google Shopping AdWords Labels`          TEXT
+  ,`Google Shopping Condition`               TEXT
+  ,`Google Shopping Custom Product`          TEXT
+  ,`Google Shopping Custom Label 0`          TEXT
+  ,`Google Shopping Custom Label 1`          TEXT
+  ,`Google Shopping Custom Label 2`          TEXT
+  ,`Google Shopping Custom Label 3`          TEXT
+  ,`Google Shopping Custom Label 4`          TEXT
+  ,`Variant Image`                           TEXT
+  ,`Variant Weight Unit`                     TEXT
 );
+```
+
+Загрузка данных. Все предложенные csv файлы имеют одинаковую структуру, поэтому все они были загружены в одну талицу последовательными запросами.
+
+```mysql
+LOAD DATA
+  INFILE '/var/lib/mysql-files/Apparel.csv'
+  IGNORE
+  INTO TABLE funny_data_loading
+  FIELDS TERMINATED BY ",";
+
+LOAD DATA
+  INFILE '/var/lib/mysql-files/Bicycles.csv'
+  IGNORE
+  INTO TABLE funny_data_loading
+  FIELDS TERMINATED BY ",";
+
+LOAD DATA
+  INFILE '/var/lib/mysql-files/Fashion.csv'
+  IGNORE
+  INTO TABLE funny_data_loading
+  FIELDS TERMINATED BY ",";
+
+LOAD DATA
+  INFILE '/var/lib/mysql-files/jewelry.csv'
+  IGNORE
+  INTO TABLE funny_data_loading
+  FIELDS TERMINATED BY ",";
+
+LOAD DATA
+  INFILE '/var/lib/mysql-files/SnowDevil.csv'
+  IGNORE
+  INTO TABLE funny_data_loading
+  FIELDS TERMINATED BY ",";  
+```
+
+Проверка общего количества загруженных строк.
+```sql
+select count(*) from funny_data_loading;
++----------+
+| count(*) |
++----------+
+|    14050 |
++----------+
+1 row in set (0.02 sec)
 ```
