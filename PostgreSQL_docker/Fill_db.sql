@@ -1,9 +1,9 @@
-insert into client (id, surname, first_name, patronymic, phone)
+insert into directory.client (id, surname, first_name, patronymic, phone)
 values (1, 'Иванов', 'Иван', 'Иванович', '111111111'),
 (2, 'Силиванов', 'Пётр', 'Петрович', '222222222'),
 (3, 'Сидоров', 'Сидор', 'Сидорович', '333333333');
 
-insert into visit (id, client_fk, date, purpose, comment)
+insert into directory.visit (id, client_fk, date, purpose, comment)
 values (1, 1, '2024-04-20', 'Обследование', '111111111'),
 (2, 2, '2024-05-20', 'Медкомиссия', '222222222'),
 (3, 1, '2024-06-10', 'Повторный осмотр', '333333333');
