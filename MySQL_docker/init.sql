@@ -1,22 +1,22 @@
-CREATE DATABASE IF NOT EXISTS medical_center;
+CREATE DATABASE medical_center CHARACTER SET utf8mb4;
 USE medical_center;
 
 CREATE TABLE `specialist` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `surname` varchar(50),
   `first_name` varchar(50),
   `patronymic` varchar(50),
-  `speciality` text
+  `speciality` mediumtext
 );
 
 CREATE TABLE `service` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `name` varchar(255),
   `description` text
 );
 
 CREATE TABLE `price` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `service_fk` int,
   `price` decimal,
   `begin_date` datetime,
@@ -24,13 +24,13 @@ CREATE TABLE `price` (
 );
 
 CREATE TABLE `specialist_service` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `specialist_fk` int,
   `service_fk` int
 );
 
 CREATE TABLE `client` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `surname` varchar(50),
   `first_name` varchar(50),
   `patronymic` varchar(50),
@@ -38,7 +38,7 @@ CREATE TABLE `client` (
 );
 
 CREATE TABLE `visit` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `client_fk` int,
   `date` datetime,
   `purpose` text,
@@ -46,14 +46,14 @@ CREATE TABLE `visit` (
 );
 
 CREATE TABLE `service_provided` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `service_fk` int,
   `visit_fk` int,
   `date` datetime
 );
 
 CREATE TABLE `examination_result` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `service_provided_fk` int,
   `date` datetime,
   `comment` text,
@@ -61,7 +61,7 @@ CREATE TABLE `examination_result` (
 );
 
 CREATE TABLE `visit_specialist` (
-  `id` int UNIQUE PRIMARY KEY NOT NULL,
+  `id` BIGINT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
   `visit_fk` int,
   `specialist_fk` int,
   `comment` text,
@@ -112,7 +112,7 @@ ALTER TABLE `visit_specialist` ADD FOREIGN KEY (`visit_fk`) REFERENCES `visit` (
 
 ALTER TABLE `visit_specialist` ADD FOREIGN KEY (`specialist_fk`) REFERENCES `specialist` (`id`);
 
-ALTER TABLE visit PARTITION BY RANGE (TO_DAYS(date))
+ALTER TABLE `visit` PARTITION BY RANGE (TO_DAYS(`date`))
 (
     PARTITION older VALUES LESS THAN (TO_DAYS('2024-07-01')),
     PARTITION p202407 VALUES LESS THAN (TO_DAYS('2024-08-01')),
@@ -124,47 +124,49 @@ ALTER TABLE visit PARTITION BY RANGE (TO_DAYS(date))
 
 -- Заполнение тестовыми данными
 
--- insert into client (id, surname, first_name, patronymic, phone)
--- values (1, 'Иванов', 'Иван', 'Иванович', '111111111'),
--- (2, 'Силиванов', 'Пётр', 'Петрович', '222222222'),
--- (3, 'Сидоров', 'Сидор', 'Сидорович', '333333333');
+insert into client (surname, first_name, patronymic, phone)
+values 
+  ('Иванов', 'Иван', 'Иванович', '111111111'),
+  ('Силиванов', 'Пётр', 'Петрович', '222222222'),
+  ('Сидоров', 'Сидор', 'Сидорович', '333333333');
 
--- insert into visit (id, client_fk, date, purpose, comment)
--- values (1, 1, '2024-07-20', 'Обследование', '111111111'),
--- (2, 2, '2024-08-20', 'Медкомиссия', '222222222'),
--- (3, 1, '2025-06-10', 'Повторный осмотр', '333333333');
+insert into visit (client_fk, date, purpose, comment)
+values 
+  (1, '2024-07-20', 'Обследование', '111111111'),
+  (2, '2024-08-20', 'Медкомиссия', '222222222'),
+  (1, '2025-06-10', 'Повторный осмотр', '333333333');
 
--- insert into specialist (id, surname, first_name, patronymic, speciality)
--- values
--- (1, 'Илизаров', 'Гавриил', 'Абрамович', 'Хирург-ортопед'),
--- (2, 'Мечников', 'Илья', 'Ильич', 'Микробиолог');
+insert into specialist (surname, first_name, patronymic, speciality)
+values
+  ('Илизаров', 'Гавриил', 'Абрамович', 'Хирург-ортопед'),
+  ('Мечников', 'Илья', 'Ильич', 'Микробиолог');
 
--- insert into visit_specialist (id, visit_fk, specialist_fk, comment)
--- values
--- (1, 1, 1, ''),
--- (2, 2, 2, ''),
--- (3, 3, 1, '');
+insert into visit_specialist (visit_fk, specialist_fk, comment)
+values
+  (1, 1, ''),
+  (2, 2, ''),
+  (3, 1, '');
 
--- INSERT INTO service (id, name)
--- VALUES 
--- 	(1,'Первичный остмотр'),
--- 	(2,'Повторный приём');
+INSERT INTO service (name)
+VALUES 
+	('Первичный остмотр'),
+	('Повторный приём');
 
--- INSERT INTO price(id, service_fk, price, begin_date, end_date)
--- VALUES 
--- 	(1, 1, 100, '2024-04-20', null),
--- 	(2, 2, 120, '2024-04-20', null),
--- 	(3, 1, 130, '2024-07-20', null);
+INSERT INTO price (service_fk, price, begin_date, end_date)
+VALUES 
+	(1, 100, '2024-04-20', null),
+	(2, 120, '2024-04-20', null),
+	(1, 130, '2024-07-20', null);
 
--- INSERT INTO service_provided (id, service_fk, visit_fk, `date`)
--- values
--- (1, 1, 1, '2024-01-10 13:30:00'),
--- (2, 2, 2, '2024-01-10 13:40:00'),
--- (3, 1, 3, '2024-02-10 10:10:00');
+INSERT INTO service_provided (service_fk, visit_fk, `date`)
+values
+(1, 1, '2024-01-10 13:30:00'),
+(2, 2, '2024-01-10 13:40:00'),
+(1, 3, '2024-02-10 10:10:00');
 
--- INSERT INTO examination_result
---   (id, service_provided_fk, date, comment, results)
--- VALUES
---   (1, 1, '2024-01-10 13:30:00', 'Биохимический анализ крови','{"GLU": 1.52, "UREA": 8, "CREA": 88.2, "CHOL": 10.9}'),
---   (2, 2, '2024-01-10 13:40:00', 'Обследование глазного дна','{"DV": 135, "DA": 63.5, "KI": 1.09}'),
---   (3, 3, '2024-02-10 10:10:00', 'Биохимический анализ крови','{"GLU": 3.82, "UREA": 8, "CREA": 88.2, "CHOL": 10.9}');
+INSERT INTO examination_result
+  (service_provided_fk, date, comment, results)
+VALUES
+  (1, '2024-01-10 13:30:00', 'Биохимический анализ крови','{"GLU": 1.52, "UREA": 8, "CREA": 88.2, "CHOL": 10.9}'),
+  (2, '2024-01-10 13:40:00', 'Обследование глазного дна','{"DV": 135, "DA": 63.5, "KI": 1.09}'),
+  (3, '2024-02-10 10:10:00', 'Биохимический анализ крови','{"GLU": 3.82, "UREA": 8, "CREA": 88.2, "CHOL": 10.9}');

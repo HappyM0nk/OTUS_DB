@@ -1,10 +1,12 @@
 version: '3.1'
 
 services:
-  medical_center_db:
+  medicalcenterdb:
     image: mysql:8.0.15
     environment:
-      - MYSQL_ROOT_PASSWORD=12345
+      - MYSQL_ROOT_PASSWORD=1
+      - MYSQL_PASSWORD=1
+      - MYSQL_USER=root
     command: 
       --init-file /init.sql
     volumes:
